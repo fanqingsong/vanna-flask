@@ -1,0 +1,7 @@
+flask
+vanna[openai]
+python-dotenv
+chromadb
+pyodbc
+
+

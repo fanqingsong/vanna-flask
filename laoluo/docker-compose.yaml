@@ -1,0 +1,12 @@
+version: '3'
+services:
+  myvanna-app:
+    build: .
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      # 将容器内的 chroma.sqlite3 文件映射到宿主机的当前目录下
+      - ./chroma.sqlite3:/app/chroma.sqlite3
+
