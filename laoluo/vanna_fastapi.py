@@ -18,13 +18,14 @@ from fastapi.middleware.cors import CORSMiddleware
 from auth.auth_handler import signJWT
 from auth.auth_bearer import JWTBearer
 
-
+import pandas as pd
 import asyncio
 import uvicorn
 
 from openai import OpenAI
 import pandas as pd
 import os
+import json
 
 # client = OpenAI(
 #     api_key="OpenAI Key或者OpenAI代理Key",
@@ -112,7 +113,7 @@ async def generate_sql(request: Request, query: UserQueryRequest):
     # return sql_result
 
 @app.post('/query_db_by_nlp', response_model=UserQueryResponse)
-async def generate_sql(request: Request, query: UserQueryRequest):
+async def query_db_by_nlp(request: Request, query: UserQueryRequest):
     # auth_header = request.headers.get('Authorization')
     # if auth_header!= 'Bearer sql':
     #     raise HTTPException(status_code=403, detail="Invalid Authorization header")
@@ -127,9 +128,20 @@ async def generate_sql(request: Request, query: UserQueryRequest):
 
     sql_sentence = vn.generate_sql(data)
     # 这里假设你有一个函数来处理SQL，比如vn.generate_sql和vn.run_sql
+    # sql_result = vn.run_sql(sql_sentence)
+
+    # 将DataFrame转换为字符串
+    # sql_result_str = sql_result.to_csv(sep='\t', na_rep='nan') if isinstance(sql_result, pd.DataFrame) else str(sql_result)
+
     sql_result = vn.run_sql(sql_sentence)
 
-    return UserQueryResponse(answer=sql_result)
+    if isinstance(sql_result, pd.DataFrame):
+        sql_result = sql_result.fillna('nan')  # Fill NaN values with 'nan'
+        sql_result_str = sql_result.to_json(orient='records')
+    else:
+        sql_result_str = json.dumps(sql_result)
+
+    return UserQueryResponse(answer=sql_result_str)
 
 
 if __name__ == "__main__":
