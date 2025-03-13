@@ -3,5 +3,7 @@ vanna[openai]
 python-dotenv
 chromadb
 pyodbc
-
-
+fastapi
+uvicorn
+pydantic
+jwt

@@ -24,11 +24,12 @@ COPY . .
 # 安装 Python 依赖
 RUN pip3 config set global.index-url https://mirrors.tuna.tsinghua.edu.cn/pypi/web/simple
 RUN pip3 install -r requirements.txt
+RUN pip3 install uvicorn
 
 # 暴露 Flask 应用的端口
-EXPOSE 5000
+EXPOSE 5001
 
 # 启动 Python 脚本
-CMD ["python3", "vanna_flask.py"]
+CMD ["python3", "vanna_fastapi.py"]
 
 

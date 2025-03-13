@@ -1,3 +1,10 @@
+
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
 #使用OpenAI API接口或者 OpenAI兼容本地大模型
 from vanna.openai.openai_chat import OpenAI_Chat
 from vanna.chromadb.chromadb_vector import ChromaDB_VectorStore

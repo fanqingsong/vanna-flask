@@ -1,6 +1,6 @@
 version: '3'
 services:
-  myvanna-app:
+  myvanna-flask-app:
     build: .
     ports:
       - "5000:5000"
@@ -9,4 +9,20 @@ services:
     volumes:
       # 将容器内的 chroma.sqlite3 文件映射到宿主机的当前目录下
       - ./chroma.sqlite3:/app/chroma.sqlite3
-
+    # 添加自动重启策略
+    restart: always
+  myvanna-fastapi-app:
+    build:
+      context: .
+      dockerfile: Dockerfile.fastapi
+    ports:
+      - "5001:5001"
+    env_file:
+      - .env
+    depends_on:
+      - myvanna-flask-app
+    volumes:
+      # 将容器内的 chroma.sqlite3 文件映射到宿主机的当前目录下
+      - ./chroma.sqlite3:/app/chroma.sqlite3
+    # 添加自动重启策略
+    restart: always
